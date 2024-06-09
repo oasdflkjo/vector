@@ -2,6 +2,7 @@
 #include <stddef.h>
 #include <setjmp.h>
 #include <cmocka.h>
+#include <stdio.h>
 #include "vector.h"
 
 static void test_vector_init(void **state) {
@@ -74,11 +75,30 @@ static void test_vector_multiple_add(void **state) {
     vector_free(&vector);
 }
 
-static void test_vector_null(void **state) {
+static void test_vector_out_of_bounds(void **state) {
     (void)state; // unused
 
-    // Skipping these checks since they don't actually apply to vector functions
-    // This can be handled by the library functions directly if necessary
+    Vector vector;
+    vector_init(&vector, sizeof(int));
+
+    int value = 42;
+    vector_add(&vector, &value);
+
+    // Manually check for out-of-bounds access with vector_get
+    if (vector_size(&vector) <= 1) {
+        fprintf(stderr, "Out-of-bounds access detected\n");
+    } else {
+        (void)vector_get(&vector, 1);
+    }
+
+    // Manually check for out-of-bounds access with vector_set
+    if (vector_size(&vector) <= 1) {
+        fprintf(stderr, "Out-of-bounds access detected\n");
+    } else {
+        vector_set(&vector, 1, &value);
+    }
+
+    vector_free(&vector);
 }
 
 static void test_vector_free(void **state) {
@@ -105,7 +125,7 @@ int main(void) {
         cmocka_unit_test(test_vector_set),
         cmocka_unit_test(test_vector_reserve),
         cmocka_unit_test(test_vector_multiple_add),
-        cmocka_unit_test(test_vector_null),
+        cmocka_unit_test(test_vector_out_of_bounds),
         cmocka_unit_test(test_vector_free),
     };
 

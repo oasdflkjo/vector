@@ -5,6 +5,7 @@
 #include <string.h>
 
 void vector_init(Vector *vector, size_t elem_size) {
+    assert(vector != NULL);
     vector->size = 0;
     vector->capacity = 4;
     vector->elem_size = elem_size;
@@ -16,9 +17,9 @@ void vector_init(Vector *vector, size_t elem_size) {
 }
 
 void vector_reserve(Vector *vector, size_t new_capacity) {
+    assert(vector != NULL);
     if (new_capacity > vector->capacity) {
-        void *new_data =
-            realloc(vector->data, new_capacity * vector->elem_size);
+        void *new_data = realloc(vector->data, new_capacity * vector->elem_size);
         if (new_data == NULL) {
             fprintf(stderr, "Failed to reallocate memory\n");
             exit(EXIT_FAILURE);
@@ -28,46 +29,31 @@ void vector_reserve(Vector *vector, size_t new_capacity) {
     }
 }
 
-void vector_add(Vector *vector, void *value) {
-    if (vector == NULL) {
-        fprintf(stderr, "Vector is NULL\n");
-        exit(EXIT_FAILURE);
-    }
+void vector_add(Vector *vector, const void *value) {
+    assert(vector != NULL);
     if (vector->size == vector->capacity) {
-        vector_reserve(vector,
-                       vector->capacity == 0 ? 4 : vector->capacity * 2);
+        vector_reserve(vector, vector->capacity == 0 ? 4 : vector->capacity * 2);
     }
     void *target = (char *)vector->data + (vector->size * vector->elem_size);
     memcpy(target, value, vector->elem_size);
     vector->size++;
 }
 
-inline void *vector_get(Vector *vector, size_t index) {
-    if (vector == NULL) {
-        fprintf(stderr, "Vector is NULL\n");
-        exit(EXIT_FAILURE);
-    }
-    if (index >= vector->size) {
-        fprintf(stderr, "Index out of bounds\n");
-        exit(EXIT_FAILURE);
-    }
+const void *vector_get(const Vector *vector, size_t index) {
+    assert(vector != NULL);
+    assert(index < vector->size);  // Ensure index is within bounds
     return (char *)vector->data + (index * vector->elem_size);
 }
 
-inline void vector_set(Vector *vector, size_t index, void *value) {
-    if (vector == NULL) {
-        fprintf(stderr, "Vector is NULL\n");
-        exit(EXIT_FAILURE);
-    }
-    if (index >= vector->size) {
-        fprintf(stderr, "Index out of bounds\n");
-        exit(EXIT_FAILURE);
-    }
+void vector_set(Vector *vector, size_t index, const void *value) {
+    assert(vector != NULL);
+    assert(index < vector->size);  // Ensure index is within bounds
     void *target = (char *)vector->data + (index * vector->elem_size);
     memcpy(target, value, vector->elem_size);
 }
 
 void vector_free(Vector *vector) {
+    assert(vector != NULL);
     free(vector->data);
     vector->data = NULL;
     vector->size = 0;
@@ -76,17 +62,11 @@ void vector_free(Vector *vector) {
 }
 
 size_t vector_size(const Vector *vector) {
-    if (vector == NULL) {
-        fprintf(stderr, "Vector is NULL\n");
-        exit(EXIT_FAILURE);
-    }
+    assert(vector != NULL);
     return vector->size;
 }
 
 size_t vector_capacity(const Vector *vector) {
-    if (vector == NULL) {
-        fprintf(stderr, "Vector is NULL\n");
-        exit(EXIT_FAILURE);
-    }
+    assert(vector != NULL);
     return vector->capacity;
 }
