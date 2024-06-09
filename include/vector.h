@@ -10,25 +10,60 @@ typedef struct {
     size_t elem_size;
 } Vector;
 
-// Initialize the vector with the element size
+/**
+ * Initializes a vector.
+ *
+ * @param vector Pointer to the vector to initialize.
+ * @param elem_size Size of each element in the vector.
+ */
 void vector_init(Vector *vector, size_t elem_size);
 
-// Reserve memory for a given capacity
+/**
+ * Reserves capacity for at least new_capacity elements.
+ *
+ * @param vector Pointer to the vector to reserve capacity for.
+ * @param new_capacity The new capacity to reserve.
+ */
 void vector_reserve(Vector *vector, size_t new_capacity);
 
-// Add an element to the vector
+/**
+ * Adds an element to the vector.
+ *
+ * @param vector Pointer to the vector to add the element to.
+ * @param value Pointer to the value to add.
+ */
 void vector_add(Vector *vector, void *value);
 
-// Get an element at a specific index
+/**
+ * Retrieves an element at the specified index.
+ *
+ * @param vector Pointer to the vector to retrieve the element from.
+ * @param index The index of the element to retrieve.
+ * @return Pointer to the retrieved element.
+ */
 void *vector_get(Vector *vector, size_t index);
 
-// Set an element at a specific index
+/**
+ * Sets an element at the specified index.
+ *
+ * @param vector Pointer to the vector to set the element in.
+ * @param index The index of the element to set.
+ * @param value Pointer to the value to set.
+ */
 void vector_set(Vector *vector, size_t index, void *value);
 
-// Free the memory allocated for the vector
+/**
+ * Frees the memory allocated for the vector.
+ *
+ * @param vector Pointer to the vector to free.
+ */
 void vector_free(Vector *vector);
 
-// Print elements of the vector assuming they are integers
+/**
+ * Prints elements of the vector assuming they are integers.
+ *
+ * @param vector Pointer to the vector to print.
+ */
 void vector_print_int(Vector *vector);
 
 #endif // VECTOR_H
